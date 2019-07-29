@@ -1,0 +1,140 @@
+#1	
+Shipt.com	
+Test Case - Successful user login	
+Description: Verify successful user login into shipt.com with valid user email and pwd	
+Tested platform - Windows 7 Chrome 75.0.37	
+Steps:														Expected result:
+Launch web browser											Success
+Enter www.shipt.com and hit enter							User lands to Shipt.com home page. Pop up displays Back to School Sale
+Close popup by clicking X in top right						Success - popup is closed
+Click log in button in top right							User lands on Shipt - Login page
+Enter valid email address into Email input field			User is able to type email address in
+Enter valid user password into Password input field			User is able to type password in to the password field
+Press LOG IN button											Log in button is active and provides CTA
+Verify successful login into shipt.com 						User successfully logged in and lands on shopping page
+
+...............................................................	
+#2	
+Locate one bug or bad workflow within the app:	
+Account --> Addresses --> User can add address out of US and can proceed with shopping. No warning/error message are being displayed.	
+Explain the behavior you are seeing:	
+Auto suggestion displays address out of country after typing random characters	
+Include any useful errors or screenshots:	
+See attachments	
+Explain why and how it needs to be corrected:	
+It appears that API validates only ZIP code instead of entered entire address. For fixing it - verify API logic that is being utilized for that funcitonality. 	
+What are the steps you would take to report the issue:	
+Attempt to rerporoduce issue on different devices and ensure its not specific device related issues, check logs, report this bug.	
+What priority would you give this bug (Scale of 1-5, 1 being highest) and why:	
+P3 because it is a corner case scenario that occurs only by typing invalid random characters when adding new address and it does not block user from performing and completing action	
+...............................................................	
+
+#3	
+What are the possible reasons for the following defect? 	
+API bug (poorly designed , logic issue)	
+How would you go about debugging the problem and gathering more information?	
+Will trace where and how(logic) the data is being stored in DB (unique vs repeated values) - whether the record is updated upon entering new number or stored as new value in separate column	
+Will test API - repeating the same action: sending request for storing 1st number. Then 2nd, then 1st again and see what response I get	
+Will Query database to see if second time entered same number has been stored/updated or not	
+Check logs to see what error(s) is in there	
+...............................................................	
+
+#4	
+SQL	
+List me the stores allowed to sell alcohol	
+SELECT NAME FROM STORES WHERE ALLOWED_ALCOHOL = TRUE;	
+Give the product name of the 2 most expensive items based on their price at store id 1	
+SELECT TOP2 NAME FROM STORE_PRICES SP LEFT JOIN PRODUCTS PR ON SP.PRODUCT_ID=PR.ID WHERE SP.STORE_ID = 1 ORDER BY PRICE DESC;	
+List the products that are not sold in the store id 2	
+SELECT NAME FROM PRODUCTS WHERE ID NOT IN (SELECT PRODUCT_ID FROM STORE_PRICES WHERE STORE_ID=2);	
+What is the most popular item sold?	
+SELECT NAME FROM PRODUCTS WHERE ID IN (SELECT PRODUCT_ID FROM ORDER_LINES GROUP BY PRODUCT_ID ORDER BY SUM(QTY) DESC LIMIT1);	
+Write a SQL statement to update the line_total field	
+UPDATE ORDER_LINES SET LINE_TOTAL = (SELECT OL.QTY*SP.PRICE FROM STORE_PRICES SP INNER JOIN ORDER_LINES OL ON SP.PRODUCT_ID = OL.PRODUCT_ID AND SP.STORE_ID = OL.STORE_ID);	
+
+...............................................................
+Automation Assessments	
+UI Automation	
+Required: Selenium webdriver, Eclipse IDE. Run as Java class.	
+***********************************************************
+package assessment;
+
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class TestClass {
+
+	public static void main(String[] args) {
+		
+		new TestClass().execute();
+
+		System.out.println("Selenium test is complete");
+
+	}
+
+	public void execute() {
+
+		System.setProperty("webdriver.chrome.driver", "C:\\Users\\Drivers\\chromedriver.exe");
+
+		WebDriver driver = new ChromeDriver();
+
+		driver.get("https://www.shipt.com");
+
+		driver.manage().timeouts().implicitlyWait(5,TimeUnit.SECONDS) ;
+		
+		WebElement element = driver.findElement(By.xpath("//button[@class='fancybox-button fancybox-close-small']"));
+		element.click(); // closes pop-up
+		driver.navigate().refresh();
+		driver.manage().timeouts().implicitlyWait(5,TimeUnit.SECONDS) ;
+		
+		WebElement logButton = driver.findElement(By.xpath("//a[text() = 'Log In']"));
+		
+		logButton.click(); // click Log In in top right
+		driver.manage().timeouts().implicitlyWait(5,TimeUnit.SECONDS) ;
+		
+		String userEmail = "loginemail@gmail.com"; //create variable userEmail
+		String userPassword = "password"; //create variable userPassword
+		
+		WebElement userEmailTextBox = driver.findElement(By.xpath("//*[@id='username']")); //locating email input field
+		userEmailTextBox.sendKeys(userEmail); // adding userEmail value in there 
+
+		WebElement userPasswordTextBox = driver.findElement(By.xpath("//*[@id='password']")); //locating password input field
+		userPasswordTextBox.sendKeys(userPassword); // adding userPassword value in there 
+
+		WebElement loginButton = driver.findElement(By.xpath("//button[text()='Log In']")); //locating the button Log In
+		loginButton.click(); //CTA 
+		
+		driver.manage().timeouts().implicitlyWait(5,TimeUnit.SECONDS) ;
+		
+		WebElement cartLink = driver.findElement(By.xpath("//*[text()='Cart']")); 
+	try {
+		cartLink.isDisplayed(); 
+			System.out.println("TC pass. Object found on the page"); 
+	} catch (Exception e) {
+			System.out.println("TC failed. Object not found: " + e);
+		}
+		
+		driver.close();
+		driver.quit();
+	}
+	
+}
+	
+...............................................................	
+API Automation	
+I am familiar how to make data-driven API testing with assertion(s) by using tools such as SOAP UI, Postman, Insomnia 	
+
+...............................................................	
+Automation Assessment Follow Up Questions:	
+1. If you chose to use a tool or language other than the recommended, briefly explain why.	
+n/a	
+2. How did you go about locating the elements for your tests?	
+Used object xpath. 	
+3. What do you believe are the most common causes for instability in UI automation?	
+Updating object properties	
+4. How do you make your tests consistent and easy to debug?	
+By following supported framework rules and best code practices	
