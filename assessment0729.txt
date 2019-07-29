@@ -3,15 +3,15 @@ Shipt.com
 Test Case - Successful user login	
 Description: Verify successful user login into shipt.com with valid user email and pwd	
 Tested platform - Windows 7 Chrome 75.0.37	
-Steps:														Expected result:
-Launch web browser											Success
-Enter www.shipt.com and hit enter							User lands to Shipt.com home page. Pop up displays Back to School Sale
-Close popup by clicking X in top right						Success - popup is closed
-Click log in button in top right							User lands on Shipt - Login page
-Enter valid email address into Email input field			User is able to type email address in
-Enter valid user password into Password input field			User is able to type password in to the password field
-Press LOG IN button											Log in button is active and provides CTA
-Verify successful login into shipt.com 						User successfully logged in and lands on shopping page
+Steps:								Expected result:
+Launch web browser						Success
+Enter www.shipt.com and hit enter				User lands to Shipt.com home page. Pop up displays Back to School Sale
+Close popup by clicking X in top right				Success - popup is closed
+Click log in button in top right				User lands on Shipt - Login page
+Enter valid email address into Email input field		User is able to type email address in
+Enter valid user password into Password input field		User is able to type password in to the password field
+Press LOG IN button						Log in button is active and provides CTA
+Verify successful login into shipt.com 				User successfully logged in and lands on shopping page
 
 ...............................................................	
 #2	
@@ -96,8 +96,8 @@ public class TestClass {
 		logButton.click(); // click Log In in top right
 		driver.manage().timeouts().implicitlyWait(5,TimeUnit.SECONDS) ;
 		
-		String userEmail = "loginemail@gmail.com"; //create variable userEmail
-		String userPassword = "password"; //create variable userPassword
+		String userEmail = "loginemail@gmail.com"; //create variable userEmail [update value with valid email]
+		String userPassword = "password"; //create variable userPassword [update value with valid password]
 		
 		WebElement userEmailTextBox = driver.findElement(By.xpath("//*[@id='username']")); //locating email input field
 		userEmailTextBox.sendKeys(userEmail); // adding userEmail value in there 
